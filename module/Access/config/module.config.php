@@ -4,6 +4,10 @@ return array(
         'invokables' => array(
             'Access\Controller\Skeleton' => 'Access\Controller\SkeletonController',
         ),
+    	'factories' => array(
+        	'Access\Cache' => 'Access\Factory\ResourcecacheFactory',
+    		'Access\Model\ResourceManager' => 'Access\Factory\ResourceManagerFactory',
+        ),
     ),
     'router' => array(
         'routes' => array(

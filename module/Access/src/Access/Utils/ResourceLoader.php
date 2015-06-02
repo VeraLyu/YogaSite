@@ -26,7 +26,7 @@ class ControllerParser
 		return explode('.', $fName)[0];
 	}
 
-	public function getModulesLoaded(array $loadedModules)
+	public static function getModulesLoaded(array $loadedModules)
 	{
 		foreach($loadedModules as $module)
 		{

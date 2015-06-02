@@ -3,16 +3,13 @@ namespace Access\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 
-use Access\Model\ResourceManagerInterface;
-
 class Resource extends AbstractActionController
 {
-	protected $resourceManager;
-
-	public function __construct(ResourcManagerInterface $resourceManager)
+	public function __construct($parent)
 	{
 		$this->resourceManager = $resourceManager;
 	}
+
 	public function indexAction()
 	{
 		//get all available quriable resources
