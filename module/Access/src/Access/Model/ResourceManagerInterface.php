@@ -3,6 +3,7 @@ namespace Access\Model;
 
 interface ResourceManagerInterface
 {
-	public function getResources();
-	public function getResource(integer $id);
+	public function getModules();
+	public function getControllers($moduleId);
+	public function getActions($moduleId, $controllerId);
 }

@@ -1,8 +1,7 @@
 <?php
 namespace Access\Model;
 
-use ResourceManagerInterface;
-
+use Access\Model\ResourceManagerInterface;
 use Access\Utils\ControllerParser;
 
 class ResourceManager implements ResourceManagerInterface
@@ -24,7 +23,8 @@ class ResourceManager implements ResourceManagerInterface
 			$this->_initCache();
 		}
 		//if this item does not exist, return null
-		return $this->resCache->getItem($itemName);
+		$result = $this->resCache->getItem($itemName);
+		return $result;
 	}
 
 	public function getModules()

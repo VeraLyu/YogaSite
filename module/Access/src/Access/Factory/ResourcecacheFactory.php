@@ -12,15 +12,18 @@ class ResourcecacheFactory implements FactoryInterface
 	{
 		$cache   = StorageFactory::factory(array(
 				'adapter' => array(
-						'name' => 'apc',
-						'options' => array('ttl' => 3600),
+						'name' => 'filesystem',
+						'options' => array(
+								'ttl' => 3600,
+								'cache_dir' => __DIR__ . '/../../../../../data/cache',
+						),
 				),
 				'plugins' => array(
 						// Don't throw exceptions on cache errors
 						'exception_handler' => array(
 								'throw_exceptions' => false
 						),
-						'serializer',
+						'Serializer',
 				)
 		));
 		return $cache;

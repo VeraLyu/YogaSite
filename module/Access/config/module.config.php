@@ -1,26 +1,31 @@
 <?php
 return array(
+	'service_manager'=> array(
+		'factories' => array(
+			'Access\Cache' => 'Access\Factory\ResourcecacheFactory',
+			'Access\Model\ResourceManager' => 'Access\Factory\ResourceManagerFactory',
+		),
+	),
     'controllers' => array(
-        'invokables' => array(
-            'Access\Controller\Skeleton' => 'Access\Controller\SkeletonController',
-        ),
-    	'factories' => array(
-        	'Access\Cache' => 'Access\Factory\ResourcecacheFactory',
-    		'Access\Model\ResourceManager' => 'Access\Factory\ResourceManagerFactory',
+		'factories' => array(
+			'Access\Controller\Modules' => 'Access\Factory\ModuleResourceControllerFactory',
+			'Access\Controller\Controllers' => 'Access\Factory\ControllerResourceControllerFactory',
+			'Access\Controller\Actions' => 'Access\Factory\ActionControllerFactory',
         ),
     ),
+
     'router' => array(
         'routes' => array(
             'access' => array(
                 'type'    => 'Literal',
                 'options' => array(
                     // Change this to something specific to your module
-                    'route'    => '/skeleton',
+                    'route'    => '/modules',
                     'defaults' => array(
                         // Change this value to reflect the namespace in which
                         // the controllers for your module are found
                         '__NAMESPACE__' => 'Access\Controller',
-                        'controller'    => 'Skeleton',
+                        'controller'    => 'Modules',
                         'action'        => 'index',
                     ),
                 ),
@@ -30,17 +35,52 @@ return array(
                     // as you solidify the routes for your module, however,
                     // you may want to remove it and replace it with more
                     // specific routes.
-                    'default' => array(
-                        'type'    => 'Segment',
+                    'module' => array(
+                        'type'    => 'segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route'    => '/:moduleName',
                             'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'moduleName' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
+                                '__NAMESPACE__' => 'Access\Controller',
+                                'controller'    => 'Controllers',
+                                'action' => 'index',
                             ),
                         ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'controller' => array(
+                                'type'    => 'segment',
+                                'options' => array(
+                                    'route'    => '/:controllerName',
+                                    'constraints' => array(
+                                        'controllerName' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    ),
+                                    'defaults' => array(
+                                        '__NAMESPACE__' => 'Access\Controller',
+							'controller'    => 'Actions',
+							'action' => 'index',
+						),
+					),
+					'may_terminate' => true,
+					'child_routes' => array(
+						'controller' => array(
+							'type'    => 'Segment',
+							'options' => array(
+								'route'    => '/:actionName[/:action]',
+								'constraints' => array(
+									'actionName' => '[a-zA-Z][a-zA-Z0-9_-]*',
+									'action' => 'get|edit'
+								),
+								'defaults' => array(
+									'action' => 'get',
+								),
+							),
+						),
+					),
+				),
+			),
                     ),
                 ),
             ),
@@ -48,7 +88,10 @@ return array(
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            'Access' => __DIR__ . '/../view',
+            'access' => __DIR__ . '/../view',
         ),
+	'strategies' => array(
+		'ViewJsonStrategy',
+	),
     ),
 );
