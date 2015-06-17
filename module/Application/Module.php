@@ -11,8 +11,7 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\EventManager\EventInterface as Event;
-use Zend\ModuleManager\ModuleManager;
+use Authentication\Lib\Auth;
 
 
 class Module
@@ -48,5 +47,34 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        $eventManager = $e->getApplication()->getEventManager();
+        $moduleRouteListener = new ModuleRouteListener();
+        $moduleRouteListener->attach($eventManager);
+
+        $eventManager->attach(
+                MvcEvent::EVENT_DISPATCH, function (MvcEvent $event)
+                    {
+                        $auth = $event->getApplication()
+                                    ->getServiceManager()
+                                    ->get('AuthService');
+    
+                        if (!$auth->hasIdentity())
+                        {
+                            $adapter = $auth->getAdapter();
+                            $response = $event->getResponse();
+    
+                            $adapter->setRequest($event->getRequest());
+                            $adapter->setResponse($response);
+                            $res = $auth->authenticate();
+                            if (!$res->isValid()) {
+                                return $response;
+                            }
+                        }
+                    
+        }, 100);
     }
 }

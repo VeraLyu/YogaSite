@@ -10,24 +10,11 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {   
     public function indexAction()
     {
-    	$sm = $this->getServiceLocator();
-    	$result = new ViewModel(array(
-    			'some_parameter' => 'some value',
-    			'success'=>true,
-    	));
-    	
-    	return $result;
-
-    	
-    	if ($sm->get('AuthService')->hasIdentity())
-    		return array();
-    	else
-    		$this->redirect()->toRoute('home/login');
+    	return array();
     }
 }

@@ -19,19 +19,19 @@ return array(
                         'action'     => 'index',
                     ),
                 ),
-              //  'may_terminate' => true,
-              //  'child_routes' => array(
-              //  		'login' => array(
-              //  			'type'    => 'Literal',
-              //  			'options' => array(
-              //  				'route'    => '/login',
-              //  				'defaults' => array(
-              //  					'controller' => 'Application\Controller\Login',
-              //  					'action' => 'login',
-              ///  				),
-               // 			),
-               // 		),
-                //	),
+                'may_terminate' => true,
+                'child_routes' => array(
+                		'login' => array(
+                			'type'    => 'Literal',
+                			'options' => array(
+                				'route'    => '/login',
+                				'defaults' => array(
+                					'controller' => 'Application\Controller\Login',
+                					'action' => 'login',
+                				),
+                			),
+                		),
+                	),
             ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
@@ -67,7 +67,6 @@ return array(
     ),
     'service_manager' => array(
     	'factories' => array(
-    		'AuthService' => 'Application\Factory\AuthServiceFactory',
     		'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
     	),
         'abstract_factories' => array(

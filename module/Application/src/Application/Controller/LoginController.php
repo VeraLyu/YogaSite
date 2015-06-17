@@ -2,6 +2,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Http\Response;
 
 class LoginController extends AbstractActionController
 {
@@ -17,11 +18,13 @@ class LoginController extends AbstractActionController
 
 	public function loginAction()
     {
-        //if already login, redirect to success page 
-        if ($this->getAuthService()->hasIdentity()){
+        //if already login, redirect to success page
+        if ($this->getAuthService()->hasIdentity())
+        {
             return $this->redirect()->toRoute('home');
         }
         $request = $this->getRequest();
+
         if(!$request->isPost())
         {
         	return array(
@@ -34,13 +37,18 @@ class LoginController extends AbstractActionController
         	if ($this->form->isValid())
         	{
         		$adapter = $this->getAuthService()->getAdapter();
-        		$adapter->setIdentity($data->user)->setCredential($data->password);
+        		$response = new Response();
+
+        		$adapter->setRequest($request);
+        		$adapter->setResponse($response);
         		$res = $this->getAuthService()->authenticate();
         		if ($res->isValid()) {
         			return $this->redirect()->toRoute('home');
         		}
+
+        		return $response;
         	}
-        	throw \Exception("Failed authentication");
+        	throw new \Exception("Failed authentication");
         }
     }
 }

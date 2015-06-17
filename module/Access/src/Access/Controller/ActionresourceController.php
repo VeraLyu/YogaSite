@@ -16,6 +16,7 @@ class ActionresourceController extends AbstractActionController
 					'text/html',
 			),
 	);
+
 	public function __construct($resourceManager)
 	{
 		$this->resourceManager = $resourceManager;
