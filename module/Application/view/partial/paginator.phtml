@@ -1,0 +1,36 @@
+<?php if ($this->pageCount) :?>
+<div>
+<ul class="pagination">
+	<?php if ($this->current != $this->first) :?>
+		<li>
+			<a href="<?php echo $this->url($this->route, array(), array('query' => array('page' => $this->previous)));?>">   
+			<<
+			</a>
+		</li>
+	<?php else: ?>
+		<li class='disabled'>
+			<a>
+			<<
+			</a>
+		</li>
+	<?php endif?>
+	<?php foreach ($this->pagesInRange as $page): ?>
+		<?php if ($page != $this->current): ?>
+			<a href="<?php echo $this->url($this->route, array(),array('query' => array('page' => $page)));?>"> 
+				<?php echo $page?>
+			</a> |
+		<?php else: ?>
+			<?php echo $page;?>
+		<?php endif;?>
+	<?php endforeach;?>
+	<?php if (isset($this->next)): ?>
+  <a href="<?php echo $this->url($this->route, array(),array('query' => array('page' => $this->next)));?>"> 
+    Next &gt;
+  </a>
+<?php else: ?>
+  <span class="disabled">Next &gt;</span>
+<?php endif; ?>
+
+</ul>
+</div>
+<?php endif;?>
