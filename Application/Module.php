@@ -11,8 +11,7 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\EventManager\EventInterface as Event;
-use Zend\ModuleManager\ModuleManager;
+use Authentication\Lib\Auth;
 
 
 class Module
@@ -48,5 +47,52 @@ class Module
                 ),
             ),
         );
+    }
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        $eventManager = $e->getApplication()->getEventManager();
+        $moduleRouteListener = new ModuleRouteListener();
+        $moduleRouteListener->attach($eventManager);
+
+        $eventManager->attach(
+                MvcEvent::EVENT_DISPATCH, function (MvcEvent $event)
+                {
+                    $auth = $event->getApplication()
+                                  ->getServiceManager()
+                                  ->get('AuthService');
+                    if (!$auth->hasIdentity())
+                    {
+                        
+                        $adapter = $auth->getAdapter();
+                        $response = $event->getResponse();
+                        $adapter->setRequest($event->getRequest());
+                        $adapter->setResponse($response);
+                        $res = $auth->authenticate();
+                        if (!$res->isValid()) {
+                            return $response;
+                        }
+                     }
+                     //\Zend\Debug\Debug::dump($auth->getIdentity());
+                }, 100);
+
+        $eventManager->attach(
+                MvcEvent::EVENT_DISPATCH, function (MvcEvent $event)
+                {
+                    $request = $event->getRequest();
+                    //\Zend\Debug\Debug::dump($request);
+                    if ($request->getHeaders('Content-type') &&
+                            $request->getHeaders(
+                                    'Content-type')->getMediaType()== 'application/json')
+                    {
+                        //\Zend\Debug\Debug::dump($request->getContent());
+                        $values = get_object_vars(
+                                Json::decode($request->getContent ()));
+                        //\Zend\Debug\Debug::dump($values);
+                        foreach ($values as $key=>$val)
+                            $request->getPost()->set($key, $val);
+                    }
+                }, 100);
+
     }
 }

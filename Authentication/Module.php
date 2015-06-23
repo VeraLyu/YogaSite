@@ -12,6 +12,8 @@ namespace Authentication;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\Json\Json;
+
 
 class Module implements AutoloaderProviderInterface
 {
@@ -107,12 +109,12 @@ class Module implements AutoloaderProviderInterface
 
                 $dbAdapter->query("
                                 INSERT INTO `users` VALUES
-                                (1, 'admin', '". md5("admin"). "', 1)
+                                (1, 'admin', '". md5("admin:My Web Site:admin"). "', 1)
                                 ")->execute();
 
                 $dbAdapter->query("
                                 INSERT INTO `users` VALUES
-                                (1000, 'guest', '". md5("guest"). "', 1000)
+                                (1000, 'guest', '". md5("guest:My Web Site:guest"). "', 1000)
                                 ")->execute();
             } catch (\Exception $e) {
                 \Zend\Debug\Debug::dump($e->getMessage());

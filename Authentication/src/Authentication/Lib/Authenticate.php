@@ -1,7 +1,7 @@
 <?php
 namespace Authentication\Lib;
 
-function auth()
+class Auth
 {
-	
+    static 
 }
