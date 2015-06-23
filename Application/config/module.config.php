@@ -21,17 +21,17 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                		'login' => array(
-                			'type'    => 'Literal',
-                			'options' => array(
-                				'route'    => '/login',
-                				'defaults' => array(
-                					'controller' => 'Application\Controller\Login',
-                					'action' => 'login',
-                				),
-                			),
+                		'single' => array(
+                		        'type'    => 'Literal',
+                		        'options' => array(
+                		                'route'    => 'logout',
+                		                'defaults' => array(
+                		                        'controller' => 'Application\Controller\Index',
+                		                        'action' => 'logout',
+                		                ),
+                		        ),
                 		),
-                	),
+                ),
             ),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
